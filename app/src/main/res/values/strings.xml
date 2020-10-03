@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Move Music</string>
+    <string name="select_platform">\"플랫폼을 선택하세요 :)\"</string>
+    <string name="saved_platform_key">selected_platform</string>
+    <string name="preference_file_key">com.example.movemusic.PREFERENCE_FILE_KEY</string>
 </resources>

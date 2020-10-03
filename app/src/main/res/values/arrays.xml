@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="platforms_array">
+        <item>melon</item>
+        <item>genie</item>
+        <item>bugs</item>
+        <item>navermusic</item>
+    </string-array>
+</resources>

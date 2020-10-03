@@ -1,11 +1,16 @@
 package com.example.movemusic;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,6 +22,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
@@ -143,9 +149,29 @@ public class MainActivity extends AppCompatActivity {
     public native void nativeDetectAndDisplay(long addrMat, long dstMat);
 
     public void buttonClicked(View view) {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
-        intent.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, REQ_CODE_SELECT_IMAGE);
+        // --- Select Platform ---
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.select_platform)
+                .setItems(R.array.platforms_array, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // The 'which' argument contains the index position
+                        // of the selected item
+                        Resources res = getResources();
+                        String[] platforms = res.getStringArray(R.array.platforms_array);
+                        Toast.makeText(MainActivity.this, platforms[which], Toast.LENGTH_SHORT).show();
+
+                        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.putString(getString(R.string.saved_platform_key), platforms[which]);
+                        editor.commit();
+
+                        // --- Select Picture ---
+                        Intent intent = new Intent(Intent.ACTION_PICK);
+                        intent.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
+                        intent.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(intent, REQ_CODE_SELECT_IMAGE);
+                    }
+                });
+        builder.show();
     }
 }
