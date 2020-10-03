@@ -43,14 +43,18 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     String path = getImagePathFromURI(data.getData());
 
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inSampleSize = 4;
-                    bitmap = BitmapFactory.decodeFile(path, options);
+//                    BitmapFactory.Options options = new BitmapFactory.Options();
+//                    options.inSampleSize = 4;
+//                    bitmap = BitmapFactory.decodeFile(path, options);
+//
+//                    if (bitmap != null) {
+//                        detectEdge();
+//                        imageView.setImageBitmap(bitmap);
+//                    }
 
-                    if (bitmap != null) {
-                        detectEdge();
-                        imageView.setImageBitmap(bitmap);
-                    }
+                    Intent intent = new Intent(getApplicationContext(), ProcessActivity.class);
+                    intent.putExtra("imgPath", path);
+                    startActivity(intent);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
