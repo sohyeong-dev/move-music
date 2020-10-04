@@ -49,5 +49,24 @@ public class ProcessActivity extends AppCompatActivity {
             albumimages.add(cropedList.get(i));
             ocrimages.add(cropedList.get(i + 1));
         }
+
+        // --- OCR ---
+
+        ArrayList<Bitmap> ocrBitmapImages = new ArrayList<>();
+        // Mat to Bitmap
+        Bitmap bmp;
+        for (Mat ocrimage: ocrimages) {
+            bmp = Bitmap.createBitmap(ocrimage.cols(), ocrimage.rows(), Bitmap.Config.RGB_565);
+            Utils.matToBitmap(ocrimage, bmp);
+            ocrBitmapImages.add(bmp);
+        }
+
+        Recognize recognize = new Recognize(this, ocrBitmapImages);
+
+        ArrayList<String> results = recognize.ocr();
+        Log.d(TAG, "onCreate: " + results.size());
+        for (String keyword: results) {
+            Log.d(TAG, "onCreate: " + keyword);
+        }
     }
 }

@@ -3,6 +3,8 @@
     package="com.example.movemusic">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -24,6 +26,10 @@
         <activity
             android:name=".MainActivity"
             android:theme="@style/NoTitle" />
+
+        <meta-data
+            android:name="com.kakao.vision.REST_API_KEY"
+            android:value="${KAKAO_OCR_REST_API_KEY}" />
     </application>
 
 </manifest>
