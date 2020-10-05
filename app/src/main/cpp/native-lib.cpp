@@ -76,10 +76,13 @@ Java_com_example_movemusic_Crop_cropingJNI(JNIEnv *env, jobject thiz, jstring im
     Mat mask;
     inRange(src_hsv, mode, mode, mask);
 
-    // --- morphology: 팽창 후 침식 ---
+    // --- morphology ---
 
     Mat kernel = Mat::ones(5, 5, CV_8UC1);  // unsigned char, 1-channel
+    // 팽창 후 침식: 잡음 제거
     morphologyEx(mask, mask, MORPH_CLOSE, kernel);
+    // 침식 후 팽창: 앨범 이미지 내 구멍 제거
+    morphologyEx(mask, mask, MORPH_OPEN, kernel);
 
     // --- Edge Detection ---
 
@@ -105,7 +108,16 @@ Java_com_example_movemusic_Crop_cropingJNI(JNIEnv *env, jobject thiz, jstring im
     }
 
     sort(temp_x.begin(), temp_x.end());
-    int album_w = temp_x[1] - temp_x[0];
+    int first = temp_x.front();
+    int second = temp_x.front();
+    temp_x.erase(temp_x.begin());
+    for (int x: temp_x) {
+        if (x - first > 3) {
+            second = x;
+            break;
+        }
+    }
+    int album_w = second - first;
 
     // --- Find Contours ---
 
@@ -123,7 +135,7 @@ Java_com_example_movemusic_Crop_cropingJNI(JNIEnv *env, jobject thiz, jstring im
         int w = rc.width;
         int h = rc.height;
 
-        if (x > temp_x[0] - 3 && x < temp_x[1] + 3 && h > album_w - 3) {
+        if (x > first - 3 && x < second + 3 && h > album_w - 3) {
             cnt++;
             // album image
             Mat abm = src(Range(y, y + h), Range(x, x + w));
