@@ -124,7 +124,7 @@ public class Recognize {
                 }
                 // System.out.println(top.get(1));
                 try {
-                    if ((int) top.get(1) > bottom_y) {
+                    if ((int) top.get(1) > bottom_y + 3) {
                         if (!keyword.equals("")) {
                             System.out.println(keyword);
 //                            System.out.println(preProcessing(keyword));
